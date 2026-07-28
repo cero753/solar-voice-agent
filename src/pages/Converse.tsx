@@ -6,7 +6,7 @@ import { useLeads } from '../context/LeadsContext'
 import { normalizeLead, type RawLead, type TranscriptTurn } from '../lib/leads'
 import {
   realModeAvailable,
-  hasPublicAgent,
+  signedUrlMode,
   getPublicAgentId,
   fetchSignedUrl,
   MOCK_SCRIPT,
@@ -45,9 +45,11 @@ function RealConverseInner({
     setError(null)
     setConnecting(true)
     try {
-      const opts = hasPublicAgent
-        ? { agentId: getPublicAgentId() as string }
-        : { signedUrl: await fetchSignedUrl() }
+      // Prefer the secure signed-URL flow (key stays server-side); fall back to a
+      // public agent id only when explicitly configured for local testing.
+      const opts = signedUrlMode
+        ? { signedUrl: await fetchSignedUrl() }
+        : { agentId: getPublicAgentId() as string }
       await Promise.resolve(conv.startSession(opts))
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
