@@ -1,13 +1,16 @@
 {
-  "name": "tmp",
+  "name": "solar-voice-advisor",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:e2e": "node test/ws-conversation.mjs",
+    "agent:create": "node agent/create-agent.mjs"
   },
   "dependencies": {
     "@elevenlabs/react": "^1.11.0",

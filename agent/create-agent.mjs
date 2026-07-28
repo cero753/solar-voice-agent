@@ -32,8 +32,7 @@ const submitLeadTool = {
   name: 'submit_lead',
   description:
     'Call once at the very end of the call with every field collected. Use empty strings for unknowns.',
-  expects_response: true,
-  response_timeout_secs: 5,
+  expects_response: false,
   parameters: {
     type: 'object',
     properties: {
