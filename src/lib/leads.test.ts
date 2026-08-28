@@ -14,6 +14,11 @@ describe('evaluateQualification (script DQ gates)', () => {
   it('DQs a low monthly bill', () => {
     expect(evaluateQualification({ ownsRoof: true, homeType: 'single-family', monthlyBill: 40 })).toMatch(/below/i)
   })
+  it('DQs a home that already has solar', () => {
+    expect(
+      evaluateQualification({ ownsRoof: true, homeType: 'single-family', monthlyBill: 300, alreadyHasSolar: true }),
+    ).toMatch(/already has solar/i)
+  })
 })
 
 describe('normalizeLead', () => {
@@ -42,5 +47,20 @@ describe('normalizeLead', () => {
     const lead = normalizeLead({ ownsRoof: 'renter', homeType: 'condo', monthlyBill: 90, status: 'booked' })
     expect(lead.status).toBe('disqualified')
     expect(lead.disqualReason).toBeTruthy()
+  })
+
+  it('overrides a "booked" status when the home already has solar', () => {
+    const lead = normalizeLead({
+      ownsRoof: 'yes',
+      homeType: 'single-family',
+      monthlyBill: '$300',
+      alreadyHasSolar: 'yes',
+      roofCondition: 'Replaced in 2021',
+      status: 'booked',
+    })
+    expect(lead.alreadyHasSolar).toBe(true)
+    expect(lead.roofCondition).toBe('Replaced in 2021')
+    expect(lead.status).toBe('disqualified')
+    expect(lead.disqualReason).toMatch(/already has solar/i)
   })
 })

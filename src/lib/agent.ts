@@ -35,19 +35,35 @@ export interface MockLine {
   text: string
 }
 
-// Condensed version of the 8-stage script (docs/CONTEXT.md) for the mock playthrough.
+/** The 8 stages Alex works through, mirrored in the UI so you can follow the call. */
+export const SCRIPT_STAGES: { title: string; detail: string }[] = [
+  { title: 'Opening', detail: 'Neighborhood outreach — confirms it’s the owner of the home' },
+  { title: 'Reason for the call', detail: 'Rate increases in the area and the SGIP program' },
+  { title: 'Qualifying', detail: 'Bill · home type & roof · credit · shading · provider · existing solar' },
+  { title: 'The bill swap', detail: 'Swaps the utility bill for a locked-in solar payment' },
+  { title: 'Decision makers', detail: 'Anyone else who needs to be on the appointment' },
+  { title: 'Set the appointment', detail: 'Engineer visit — 10–15 min evaluation, 10–15 min walkthrough' },
+  { title: 'Lock & confirm', detail: 'Conflicts, attendees, best phone and email' },
+  { title: 'Recap & close', detail: 'Time, address, bring your latest bill, questions' },
+]
+
+// Condensed version of the 8-stage script for the mock playthrough.
 export const MOCK_SCRIPT: MockLine[] = [
-  { role: 'agent', text: "Hi, is this the homeowner? This is Alex — we're working right in your neighborhood this week." },
+  { role: 'agent', text: "Hey, how's it going? This is just Alex — we're working right in the corner of your neighborhood. Am I speaking with the owner of the home?" },
   { role: 'user', text: 'Yeah, this is me.' },
-  { role: 'agent', text: "Great. We're helping a few neighbors look at rising electricity rates and whether their home may qualify for the SGIP savings program. Mind if I ask a couple quick questions?" },
-  { role: 'user', text: 'Sure, go ahead.' },
-  { role: 'agent', text: 'Roughly, is your monthly electric bill above $150?' },
+  { role: 'agent', text: "Great. We're working with a few of your neighbors about the rate increases in your area — a lot of homes around here are getting hit with hikes and outages. We're checking who qualifies for a program called SGIP." },
+  { role: 'user', text: 'Okay, go ahead.' },
+  { role: 'agent', text: "I'm assuming you're paying more than $150 a month on electricity, right? What's your average bill?" },
   { role: 'user', text: "Yeah, it's around $240." },
-  { role: 'agent', text: 'And is this a single-family home that you own?' },
-  { role: 'user', text: 'Yes, we own it.' },
-  { role: 'agent', text: "Perfect. The program may reduce that bill significantly with no cost to look. Let's get an engineer out to evaluate — does a weekday afternoon work?" },
+  { role: 'agent', text: "Oh wow, that's high — you're exactly who this program is for. Is this a single-family home, and do you own the roof?" },
+  { role: 'user', text: 'Yes, single-family, we own it.' },
+  { role: 'agent', text: 'Any large trees shading the roof, who’s your provider, and do you already have solar?' },
+  { role: 'user', text: 'One tree on the west side, SMUD, and no solar yet.' },
+  { role: 'agent', text: "Perfect. So see how you're paying $240 every month to SMUD? This program is designed to swap that for a locked-in payment that doesn't climb with inflation." },
+  { role: 'user', text: 'That sounds interesting.' },
+  { role: 'agent', text: "Let's get one of our engineers out — about 10 to 15 minutes to evaluate, another 10 to 15 to walk you through it. Morning or afternoon?" },
   { role: 'user', text: 'Thursday afternoon works.' },
-  { role: 'agent', text: "You're all set. I'll capture your details and send a confirmation. Thanks so much!" },
+  { role: 'agent', text: "You're all set for Thursday at 3. Have your most recent electricity bill ready and make sure all decision makers are there. Thanks so much!" },
 ]
 
 export function sampleRawLead(persona: 'qualified' | 'disqualified'): RawLead {
@@ -63,6 +79,8 @@ export function sampleRawLead(persona: 'qualified' | 'disqualified'): RawLead {
       creditAbove650: 'unsure',
       shading: 'Shared roof, N/A',
       utilityProvider: 'PG&E',
+      alreadyHasSolar: 'no',
+      roofCondition: 'HOA-managed, not theirs to modify',
       decisionMakers: 'Self',
       appointmentDateTime: '',
       appointmentType: '',
@@ -81,6 +99,8 @@ export function sampleRawLead(persona: 'qualified' | 'disqualified'): RawLead {
     creditAbove650: 'yes',
     shading: 'One tree on the west side, minor',
     utilityProvider: 'SMUD',
+    alreadyHasSolar: 'no',
+    roofCondition: 'Roof re-shingled about 4 years ago',
     decisionMakers: 'Spouse — Taylor Blake',
     appointmentDateTime: 'Thursday, Aug 6 at 3:00 PM',
     appointmentType: 'in-home',

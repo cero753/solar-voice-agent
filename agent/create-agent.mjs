@@ -46,6 +46,8 @@ const submitLeadTool = {
       creditAbove650: leadProps('yes, no, or unsure'),
       shading: leadProps('Notes about roof shading / trees'),
       utilityProvider: leadProps('Current electricity provider'),
+      alreadyHasSolar: leadProps('yes or no — do they already have solar on the home'),
+      roofCondition: leadProps('Age/condition of the roof if mentioned'),
       decisionMakers: leadProps('Other decision makers who should attend'),
       appointmentDateTime: leadProps('Scheduled date & time (only if booked)'),
       appointmentType: leadProps('in-home or virtual'),
@@ -66,7 +68,7 @@ const conversationConfig = {
       tools: [submitLeadTool],
     },
     first_message:
-      "Hi there, this is Alex — I'm reaching out to a few homeowners in your neighborhood about lowering electricity costs. Do you have a quick minute?",
+      "Hey, how's it going? This is just Alex — we're actually working right in the corner of your neighborhood, we'll be here for the next couple of weeks. Am I speaking with the owner of the home?",
     language: 'en',
   },
   tts: {

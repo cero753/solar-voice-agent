@@ -23,12 +23,16 @@ export function StatusBadge({ status }: { status: Lead['status'] }) {
   )
 }
 
+function yesNo(v: boolean | null): string {
+  return v === null ? '' : v ? 'Yes' : 'No'
+}
+
 export default function LeadDetails({ lead }: { lead: Lead }) {
   const money = lead.monthlyBill === null ? '' : `$${lead.monthlyBill}/mo`
   return (
     <div className="flex flex-col gap-6">
       <section>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Customer</h3>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Customer details</h3>
         <div className="grid grid-cols-2 gap-4">
           <Field label="Name" value={lead.name} />
           <Field label="Phone" value={lead.phone} />
@@ -38,14 +42,16 @@ export default function LeadDetails({ lead }: { lead: Lead }) {
       </section>
 
       <section>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Qualifying</h3>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Qualifying notes</h3>
         <div className="grid grid-cols-2 gap-4">
           <Field label="Monthly bill" value={money} />
-          <Field label="Home type" value={lead.homeType} />
-          <Field label="Owns roof" value={lead.ownsRoof === null ? '' : lead.ownsRoof ? 'Yes' : 'No'} />
-          <Field label="Credit > 650" value={lead.creditAbove650} />
           <Field label="Utility provider" value={lead.utilityProvider} />
+          <Field label="Home type" value={lead.homeType} />
+          <Field label="Owns roof" value={yesNo(lead.ownsRoof)} />
+          <Field label="Credit > 650" value={lead.creditAbove650} />
           <Field label="Shading" value={lead.shading} />
+          <Field label="Already has solar" value={yesNo(lead.alreadyHasSolar)} />
+          <Field label="Roof condition" value={lead.roofCondition} />
           <Field label="Decision makers" value={lead.decisionMakers} />
           <Field label="Language" value={lead.languageBookedIn} />
         </div>

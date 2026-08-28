@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import type { TranscriptTurn } from '../lib/leads'
+import { SCRIPT_STAGES } from '../lib/agent'
 
 export interface CallPanelProps {
   mode: 'real' | 'mock'
@@ -28,10 +29,10 @@ export default function CallPanel(props: CallPanelProps) {
   return (
     <div className="mx-auto flex max-w-2xl flex-col items-center gap-6 px-4 py-10">
       <div className="text-center">
-        <h1 className="text-3xl font-semibold text-white">Talk to our Solar Advisor</h1>
+        <h1 className="text-3xl font-semibold text-white">Solar Consultation Call</h1>
         <p className="mt-2 text-slate-400">
-          Click the button, allow your microphone, and have a quick conversation about lowering your
-          electricity bill. We&apos;ll see if your home qualifies and book a free evaluation.
+          Click the button and allow your microphone. Alex runs the full consultation script — checks
+          whether your home qualifies for the SGIP program and books a free engineer evaluation.
         </p>
       </div>
 
@@ -116,6 +117,31 @@ export default function CallPanel(props: CallPanelProps) {
       </div>
 
       {devActions && <div className="flex flex-wrap items-center justify-center gap-3">{devActions}</div>}
+
+      {/* The script the advisor is working through, so you can follow along live. */}
+      <section className="w-full">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+          What the advisor covers
+        </h2>
+        <ol className="grid gap-2 sm:grid-cols-2">
+          {SCRIPT_STAGES.map((s, i) => (
+            <li
+              key={s.title}
+              className="rounded-lg border border-slate-700/60 bg-slate-900/40 px-3 py-2"
+            >
+              <span className="text-sm font-medium text-slate-100">
+                {i + 1}. {s.title}
+              </span>
+              <span className="mt-0.5 block text-xs text-slate-400">{s.detail}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-3 text-xs text-slate-500">
+          Alex is an AI voice assistant and will tell you so if you ask. It never asks for a Social
+          Security number, bank or card details — credit is self-reported only. Say &ldquo;take me off
+          your list&rdquo; at any point and the call ends immediately.
+        </p>
+      </section>
     </div>
   )
 }

@@ -25,6 +25,8 @@ export interface LeadRow {
   credit_above_650: string
   shading: string
   utility_provider: string
+  already_has_solar: boolean | null
+  roof_condition: string
   decision_makers: string
   appointment_datetime: string
   appointment_type: string
@@ -49,6 +51,8 @@ export function leadToRow(l: Lead): LeadRow {
     credit_above_650: l.creditAbove650,
     shading: l.shading,
     utility_provider: l.utilityProvider,
+    already_has_solar: l.alreadyHasSolar,
+    roof_condition: l.roofCondition,
     decision_makers: l.decisionMakers,
     appointment_datetime: l.appointmentDateTime,
     appointment_type: l.appointmentType,
@@ -74,6 +78,8 @@ export function rowToLead(r: LeadRow): Lead {
     creditAbove650: (r.credit_above_650 as Lead['creditAbove650']) ?? 'unsure',
     shading: r.shading ?? '',
     utilityProvider: r.utility_provider ?? '',
+    alreadyHasSolar: r.already_has_solar ?? null,
+    roofCondition: r.roof_condition ?? '',
     decisionMakers: r.decision_makers ?? '',
     appointmentDateTime: r.appointment_datetime ?? '',
     appointmentType: (r.appointment_type as Lead['appointmentType']) ?? '',

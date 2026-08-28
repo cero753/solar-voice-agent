@@ -23,6 +23,8 @@ export interface RawLead {
   creditAbove650?: string
   shading?: string
   utilityProvider?: string
+  alreadyHasSolar?: boolean | string
+  roofCondition?: string
   decisionMakers?: string
   appointmentDateTime?: string
   appointmentType?: string
@@ -44,6 +46,8 @@ export interface Lead {
   creditAbove650: YesNoUnsure
   shading: string
   utilityProvider: string
+  alreadyHasSolar: boolean | null
+  roofCondition: string
   decisionMakers: string
   appointmentDateTime: string
   appointmentType: 'in-home' | 'virtual' | ''
@@ -99,6 +103,7 @@ export function evaluateQualification(l: {
   ownsRoof: boolean | null
   homeType: HomeType
   monthlyBill: number | null
+  alreadyHasSolar?: boolean | null
 }): string {
   if (l.ownsRoof === false) return 'Does not own the roof / not the homeowner'
   if ((l.homeType === 'condo' || l.homeType === 'townhome') && l.ownsRoof !== true) {
@@ -107,6 +112,7 @@ export function evaluateQualification(l: {
   if (l.monthlyBill !== null && l.monthlyBill < MIN_MONTHLY_BILL) {
     return `Monthly bill $${l.monthlyBill} is below the $${MIN_MONTHLY_BILL} threshold`
   }
+  if (l.alreadyHasSolar === true) return 'Home already has solar installed'
   return ''
 }
 
@@ -123,8 +129,9 @@ export function normalizeLead(raw: RawLead, opts?: { createdAt?: string; transcr
   const ownsRoof = toBool(raw.ownsRoof)
   const homeType = toHomeType(raw.homeType)
   const monthlyBill = toNumber(raw.monthlyBill)
+  const alreadyHasSolar = toBool(raw.alreadyHasSolar)
 
-  const autoDQ = evaluateQualification({ ownsRoof, homeType, monthlyBill })
+  const autoDQ = evaluateQualification({ ownsRoof, homeType, monthlyBill, alreadyHasSolar })
   const explicitDQ = String(raw.status ?? '').toLowerCase().startsWith('disq')
   const status: LeadStatus = autoDQ || explicitDQ ? 'disqualified' : 'booked'
 
@@ -142,6 +149,8 @@ export function normalizeLead(raw: RawLead, opts?: { createdAt?: string; transcr
     creditAbove650: toCredit(raw.creditAbove650),
     shading: (raw.shading ?? '').trim(),
     utilityProvider: (raw.utilityProvider ?? '').trim(),
+    alreadyHasSolar,
+    roofCondition: (raw.roofCondition ?? '').trim(),
     decisionMakers: (raw.decisionMakers ?? '').trim(),
     appointmentDateTime: (raw.appointmentDateTime ?? '').trim(),
     appointmentType: appointmentType === 'virtual' ? 'virtual' : appointmentType === 'in-home' || appointmentType === 'in home' ? 'in-home' : '',
